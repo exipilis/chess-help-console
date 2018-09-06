@@ -8,4 +8,8 @@ img = cv2.imread('s.png')
 # board = detect_board_color(img)
 board = detect_board_hough(img)
 
+if board is not None:
+    xmin, ymin, xmax, ymax = board
+    cv2.imwrite('cut.png', img[ymin:ymax+1, xmin:xmax+1])
+
 print(board)

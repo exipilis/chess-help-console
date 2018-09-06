@@ -93,10 +93,9 @@ def detect_board_hough(img):
         v_where = np.where(vlsd == cd)
         if np.size(h_where) >= 8 and np.size(v_where) >= 8:
             xmin = vls[v_where[0][0]] + 1
-            xmax = vls[v_where[0][-1]] + cd + 1
+            xmax = vls[v_where[0][-1]] + cd
             ymin = hls[h_where[0][0]] + 1
-            ymax = hls[h_where[0][-1]] + cd + 1
-            cv2.imwrite('cut.png', gray[ymin:ymax, xmin:xmax])
-            print('a')
+            ymax = hls[h_where[0][-1]] + cd
+            return xmin, ymin, xmax, ymax
 
     return None

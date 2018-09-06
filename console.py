@@ -2,7 +2,7 @@ import chess.uci
 import numpy as np
 import pyscreenshot
 
-from utils import detect_board_opencv
+from utils import detect_board_opencv, detect_board_hough
 
 handler = chess.uci.InfoHandler()
 handler.multipv(3)
@@ -18,7 +18,7 @@ if __name__ == '__main__':
         screenshot = np.array(screenshot)
 
         # detect board position
-        board = detect_board_opencv(screenshot)
+        board = detect_board_hough(screenshot)
         if board is None:
             print('board not detected')
             continue
