@@ -1,5 +1,6 @@
 import chess.uci
-import pyscreenshot as ImageGrab
+import pyscreenshot
+from utils import detect_board_opencv
 
 
 handler = chess.uci.InfoHandler()
@@ -11,7 +12,19 @@ i = 0
 if __name__ == '__main__':
 
     while True:
-        im = ImageGrab.grab()
+        # take screenshot
+        screenshot = pyscreenshot.grab()
+
+        # detect board position
+        board = detect_board_opencv(screenshot)
+        if board is None:
+            print('board not detected')
+            continue
+
+        print(board)
+        continue
+
+        # detect position
 
         # give your position to the engine:
         # fen = randfen.generate_board()

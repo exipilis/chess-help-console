@@ -4,7 +4,7 @@ import numpy as np
 
 def detect_board_opencv(img):
     gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
-    gray = gray[0:1400, :]
+    gray = gray[300:1400, 300:2200]
     # gray = cv2.resize(gray, None, fx=0.5, fy=0.5)
     # gray = cv2.equalizeHist(gray)
     cv2.imwrite('gray.png', gray)
@@ -44,7 +44,7 @@ def detect_board_color(img):
     b, g, r = np.moveaxis(img, -1, 0)
 
     board = 127 * np.ones(img.shape, dtype=np.uint8)
-    mask = (r == 174) & (g == 137) & (b == 104)
+    mask = (np.abs(r - 174) < 20) & (np.abs(g - 137) < 20) & (np.abs(b - 104) < 20)
     board[mask] = 0
 
     cv2.imwrite('b.png', board)
