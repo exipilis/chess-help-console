@@ -3,3 +3,7 @@ numpy
 pyscreenshot
 opencv-python
 python-chess
+keras
+tensorflow
+pydot
+graphviz
