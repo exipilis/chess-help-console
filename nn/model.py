@@ -10,11 +10,13 @@ def piece_model() -> Model:
     x = MaxPool2D()(x)
     x = Conv2D(16, 3, activation='relu')(x)
     x = Conv2D(16, 3, activation='relu')(x)
+    x = MaxPool2D()(x)
+    x = Conv2D(16, 3, activation='relu')(x)
     x = Flatten()(x)
     x = Dense(13, activation='softmax')(x)
 
     m = Model(inputs=img, outputs=x)
-    m.compile('adam', 'categorical_crossentropy')
+    m.compile('adam', 'categorical_crossentropy', metrics=['accuracy'])
 
     return m
 
