@@ -7,3 +7,5 @@ keras
 tensorflow
 pydot
 graphviz
+imageio
+scipy
