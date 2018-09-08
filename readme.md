@@ -25,3 +25,5 @@ Images are saved to `pngs/` folder by `save.php` script.
 
 Changing `let i = 0` in `index.html` and refreshing page will yield board images for other piece set 
 (doing it in a loop causes web browser hanging).
+
+Generated pngs are stored [here](https://drive.google.com/open?id=1Xhd4tvIjbg8T7l0BRe0qKiakf_roZGkX).
