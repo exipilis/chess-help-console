@@ -60,8 +60,7 @@ def detect_board_color(img):
     print('a')
 
 
-def detect_board_hough(img):
-    gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
+def detect_board_hough(gray):
     h, w = gray.shape
     edges = cv2.Canny(gray, 210, 255, apertureSize=3)
 
