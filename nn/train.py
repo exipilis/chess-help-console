@@ -26,7 +26,7 @@ steps = 100
 model.fit_generator(
     generator=train_gen,
     steps_per_epoch=steps,
-    epochs=10,
+    epochs=30,
     callbacks=[ModelCheckpoint(weights_filename, save_best_only=True)],
     validation_data=valid_gen,
     validation_steps=steps / 10,
