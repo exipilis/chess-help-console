@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
+    <link href="css/css.css" rel="stylesheet">
+    <link href="css/css1.css" rel="stylesheet">
+    <link href="css/dark.css" type="text/css" rel="stylesheet">
+    <link href="css/common.css" type="text/css" rel="stylesheet">
+    <link href="css/board.css" type="text/css" rel="stylesheet">
+
+    <style type="text/css">
+        div.lichess_game .cg-board-wrap,
+        div.board_and_ground .cg-board-wrap {
+            width: 696px;
+            height: 696px;
+        }
+    </style>
+
+
+    <link href="css/tv.css" type="text/css" rel="stylesheet">
+    <link rel="preload" href="https://lichess1.org/assets/font80/fonts/lichess.woff" as="font" type="font/woff"
+          crossorigin="">
+
+    <script src="https://code.jquery.com/jquery-3.3.1.min.js" crossorigin="anonymous"></script>
+    <script src="https://html2canvas.hertzen.com/dist/html2canvas.min.js"></script>
+
+    <script>
+        let boards = ['blue', 'blue2', 'wood2', 'wood3', 'blue3', 'marble', 'brown', 'green', 'olive',
+            'purple', 'grey', 'wood', 'canvas', 'leather', 'metal', 'maple'];
+        let piece_styles = ['cburnett', 'chess7', 'chessnut', 'fantasy', 'leipzig', 'merida', 'pirouetti', 'reillycraig', 'riohacha'];
+
+        $().ready(function () {
+            $.ajaxSetup({
+                url: 'http://localhost:9000/save.php',
+                type: 'POST',
+                dataType: 'json'
+            });
+
+            let i = 0, piece_set = piece_styles[i];
+            $('body').prepend('<link rel="stylesheet" href="pieces/' + piece_set + '.css">');
+
+            boards.forEach(board => {
+                let clone = $('#board-sample').clone();
+                clone.addClass(board);
+                $('body').append(clone);
+                html2canvas(clone.find('#board')[0]).then(canvas => $.ajax({
+                        data: {
+                            img: canvas.toDataURL('image/png'),
+                            fn: piece_set + '_' + board
+                        },
+                        success: () => clone.remove()
+                    })
+                )
+            })
+        })
+    </script>
+</head>
+<body class="preload base Woodi dark Basic online">
+
+<div id="board-sample" style="height:2000px">
+    <div class="content is2d">
+        <div id="lichess">
+            <div class="round cg-512">
+                <div class="lichess_game gotomove variant_standard">
+                    <div class="lichess_board_wrap">
+                        <div class="lichess_board standard">
+                            <div class="cg-board-wrap orientation-white manipulable">
+                                <div class="cg-board" id="board">
+                                    <piece class="white pawn" style="transform: translate(0px, 0px);"></piece>
+                                    <piece class="white pawn" style="transform: translate(0px, 87px);"></piece>
+                                    <piece class="white pawn" style="transform: translate(0px, 174px);"></piece>
+                                    <piece class="white pawn" style="transform: translate(0px, 261px);"></piece>
+
+                                    <piece class="white knight" style="transform: translate(0px, 348px);"></piece>
+                                    <piece class="white knight" style="transform: translate(0px, 435px);"></piece>
+                                    <piece class="white knight" style="transform: translate(0px, 522px);"></piece>
+                                    <piece class="white knight" style="transform: translate(0px, 609px);"></piece>
+
+                                    <piece class="white bishop" style="transform: translate(87px, 0px);"></piece>
+                                    <piece class="white bishop" style="transform: translate(87px, 87px);"></piece>
+                                    <piece class="white bishop" style="transform: translate(87px, 174px);"></piece>
+                                    <piece class="white bishop" style="transform: translate(87px, 261px);"></piece>
+
+                                    <piece class="white rook" style="transform: translate(87px, 348px);"></piece>
+                                    <piece class="white rook" style="transform: translate(87px, 435px);"></piece>
+                                    <piece class="white rook" style="transform: translate(87px, 522px);"></piece>
+                                    <piece class="white rook" style="transform: translate(87px, 609px);"></piece>
+
+                                    <piece class="white queen" style="transform: translate(174px, 0px);"></piece>
+                                    <piece class="white queen" style="transform: translate(174px, 87px);"></piece>
+                                    <piece class="white queen" style="transform: translate(174px, 174px);"></piece>
+                                    <piece class="white queen" style="transform: translate(174px, 261px);"></piece>
+
+                                    <piece class="white king" style="transform: translate(174px, 348px);"></piece>
+                                    <piece class="white king" style="transform: translate(174px, 435px);"></piece>
+                                    <piece class="white king" style="transform: translate(174px, 522px);"></piece>
+                                    <piece class="white king" style="transform: translate(174px, 609px);"></piece>
+
+                                    <piece class="black pawn" style="transform: translate(261px, 0px);"></piece>
+                                    <piece class="black pawn" style="transform: translate(261px, 87px);"></piece>
+                                    <piece class="black pawn" style="transform: translate(261px, 174px);"></piece>
+                                    <piece class="black pawn" style="transform: translate(261px, 261px);"></piece>
+
+                                    <piece class="black knight" style="transform: translate(261px, 348px);"></piece>
+                                    <piece class="black knight" style="transform: translate(261px, 435px);"></piece>
+                                    <piece class="black knight" style="transform: translate(261px, 522px);"></piece>
+                                    <piece class="black knight" style="transform: translate(261px, 609px);"></piece>
+
+                                    <piece class="black bishop" style="transform: translate(348px, 0px);"></piece>
+                                    <piece class="black bishop" style="transform: translate(348px, 87px);"></piece>
+                                    <piece class="black bishop" style="transform: translate(348px, 174px);"></piece>
+                                    <piece class="black bishop" style="transform: translate(348px, 261px);"></piece>
+
+                                    <piece class="black rook" style="transform: translate(348px, 348px);"></piece>
+                                    <piece class="black rook" style="transform: translate(348px, 435px);"></piece>
+                                    <piece class="black rook" style="transform: translate(348px, 522px);"></piece>
+                                    <piece class="black rook" style="transform: translate(348px, 609px);"></piece>
+
+                                    <piece class="black queen" style="transform: translate(435px, 0px);"></piece>
+                                    <piece class="black queen" style="transform: translate(435px, 87px);"></piece>
+                                    <piece class="black queen" style="transform: translate(435px, 174px);"></piece>
+                                    <piece class="black queen" style="transform: translate(435px, 261px);"></piece>
+
+                                    <piece class="black king" style="transform: translate(435px, 348px);"></piece>
+                                    <piece class="black king" style="transform: translate(435px, 435px);"></piece>
+                                    <piece class="black king" style="transform: translate(435px, 522px);"></piece>
+                                    <piece class="black king" style="transform: translate(435px, 609px);"></piece>
+
+                                    <square class="last-move" style="transform: translate(0px, 174px);"></square>
+                                    <square class="last-move" style="transform: translate(87px, 174px);"></square>
+                                    <square class="last-move" style="transform: translate(174px, 174px);"></square>
+                                    <square class="last-move" style="transform: translate(261px, 174px);"></square>
+                                    <square class="last-move" style="transform: translate(348px, 174px);"></square>
+                                    <square class="last-move" style="transform: translate(435px, 174px);"></square>
+
+                                    <square class="last-move" style="transform: translate(0px, 261px);"></square>
+                                    <square class="last-move" style="transform: translate(87px, 261px);"></square>
+                                    <square class="last-move" style="transform: translate(174px, 261px);"></square>
+                                    <square class="last-move" style="transform: translate(261px, 261px);"></square>
+                                    <square class="last-move" style="transform: translate(348px, 261px);"></square>
+                                    <square class="last-move" style="transform: translate(435px, 261px);"></square>
+
+                                    <square class="last-move" style="transform: translate(0px, 522px);"></square>
+                                    <square class="last-move" style="transform: translate(87px, 522px);"></square>
+                                    <square class="last-move" style="transform: translate(174px, 522px);"></square>
+                                    <square class="last-move" style="transform: translate(261px, 522px);"></square>
+                                    <square class="last-move" style="transform: translate(348px, 522px);"></square>
+                                    <square class="last-move" style="transform: translate(435px, 522px);"></square>
+
+                                    <square class="last-move" style="transform: translate(0px, 609px);"></square>
+                                    <square class="last-move" style="transform: translate(87px, 609px);"></square>
+                                    <square class="last-move" style="transform: translate(174px, 609px);"></square>
+                                    <square class="last-move" style="transform: translate(261px, 609px);"></square>
+                                    <square class="last-move" style="transform: translate(348px, 609px);"></square>
+                                    <square class="last-move" style="transform: translate(435px, 609px);"></square>
+
+                                    <square class="last-move" style="transform: translate(609px, 0px);"></square>
+                                    <square class="last-move" style="transform: translate(609px, 87px);"></square>
+                                    <square class="last-move" style="transform: translate(609px, 174px);"></square>
+                                    <square class="last-move" style="transform: translate(609px, 261px);"></square>
+                                    <square class="last-move" style="transform: translate(609px, 348px);"></square>
+                                    <square class="last-move" style="transform: translate(609px, 435px);"></square>
+                                    <square class="last-move" style="transform: translate(609px, 522px);"></square>
+                                    <square class="last-move" style="transform: translate(609px, 609px);"></square>
+
+                                    <!--<square class="move-dest" style="transform: translate(174px, 348px);"></square>-->
+                                    <!--<square class="last-move move-dest oc" style="transform: translate(87px, 261px);"></square>-->
+
+                                </div>
+                                <svg>
+                                    <defs></defs>
+                                </svg>
+                                <coords class="ranks">
+                                    <coord>1</coord>
+                                    <coord>2</coord>
+                                    <coord>3</coord>
+                                    <coord>4</coord>
+                                    <coord>5</coord>
+                                    <coord>6</coord>
+                                    <coord>7</coord>
+                                    <coord>8</coord>
+                                </coords>
+                                <coords class="files">
+                                    <coord>a</coord>
+                                    <coord>b</coord>
+                                    <coord>c</coord>
+                                    <coord>d</coord>
+                                    <coord>e</coord>
+                                    <coord>f</coord>
+                                    <coord>g</coord>
+                                    <coord>h</coord>
+                                </coords>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>
