@@ -1,47 +1,73 @@
+import datetime
+import time
+
 import chess.uci
+import cv2
 import numpy as np
 import pyscreenshot
+from chess.engine import EngineTerminatedException
+from keras.models import load_model
 
-from utils import detect_board_opencv, detect_board_hough
+from utils import detect_board_hough, read_board, make_fen, detect_one, whos_turn
 
 handler = chess.uci.InfoHandler()
-handler.multipv(3)
+# handler.multipv(3)
 engine = chess.uci.popen_engine('stockfish')  # give correct address of your engine here
 engine.info_handlers.append(handler)
-i = 0
+pieces = ['', 'P', 'N', 'B', 'R', 'Q', 'K', 'p', 'n', 'b', 'r', 'q', 'k']
 
-if __name__ == '__main__':
+model = load_model('nn/weights/chess.h5')
+model_shape = model.input_shape[1:]
 
+
+def main():
     while True:
         # take screenshot
         screenshot = pyscreenshot.grab()
         screenshot = np.array(screenshot)
+        gray = cv2.cvtColor(screenshot, cv2.COLOR_BGR2GRAY)
 
         # detect board position
-        board = detect_board_hough(screenshot)
-        if board is None:
+        board_coords = detect_board_hough(gray)
+        if board_coords is None:
             print('board not detected')
+            cv2.imwrite('/tmp/' + datetime.datetime.now().strftime("%y%m%d_%H%M%S") + '.png', gray)
             continue
 
-        print(board)
-        continue
+        # recognize pieces with nn
+        xmin, ymin, xmax, ymax = board_coords
+        board = gray[ymin:ymax + 1, xmin:xmax + 1]
 
-        # detect position
+        # detect board orientation
+        one_detected = detect_one(gray, board_coords)
+        # print('one %s' % one_detected)
 
-        # give your position to the engine:
-        # fen = randfen.generate_board()
+        # detect who's turn
+        wt = whos_turn(gray, board_coords)
+        whites_turn = one_detected != wt
+        # print('whites turn %s' % whites_turn)
+
+        piece_predictions = read_board(board, model)
+        if not one_detected:
+            piece_predictions = np.flip(piece_predictions, 0)
+
+        fen = make_fen(piece_predictions, pieces, whites_turn)
+
+        # position = np.empty((8, 8), dtype=np.str)
+        # for u in range(8):
+        #     for v in range(8):
+        #         position[u, v] = pieces[piece_predictions[u + 8 * v]]
+        # print(position)
         # print(fen)
 
-        i = 1 - i
-        if i == 0:
-            board = chess.Board("rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1")
-        else:
-            board = chess.Board("1k1r4/pp1b1R2/3q2pp/4p3/2B5/4Q3/PPP2B2/2K5 b - - 0 1")
-        # board = chess.Board(fen)
+        # engine
+        time.sleep(0.01)
+        board = chess.Board(fen)
         engine.position(board)
 
-        # Set your evaluation time, in ms:
-        evaltime = 1000  # so 5 seconds
+        time.sleep(0.1)
+
+        evaltime = 500
         try:
             evaluation = engine.go(movetime=evaltime)
 
@@ -50,7 +76,13 @@ if __name__ == '__main__':
             if handler.info['score'][1].cp is not None:
                 print('evaluation value: ', handler.info["score"][1].cp / 100.0)
             print('Corresponding line: ', board.variation_san(handler.info["pv"][1]))
+            print()
             # print(handler.info)
             # handler.multipv(5)
-        except chess.engine.EngineTerminatedException:
-            print('exception')
+        except (EngineTerminatedException, ValueError) as e:
+            print(e)
+        continue
+
+
+if __name__ == '__main__':
+    main()
