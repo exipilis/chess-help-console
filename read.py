@@ -2,10 +2,10 @@ import cv2
 from keras.models import load_model
 from scipy.misc import imresize
 
-from utils import detect_board_hough
+from utils import detect_board_hough, detect_one, whos_turn
 import numpy as np
 
-img = cv2.imread('s.png')
+img = cv2.imread('test/180908_165259.png')
 gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
 
 model = load_model('nn/weights/chess.h5')
@@ -23,6 +23,13 @@ if board_coords is not None:
 
     h, w = board.shape[0:2]
     sh, sw = h // 8, w // 8
+
+    one_detected = detect_one(gray, board_coords)
+    print(one_detected)
+
+    wt = whos_turn(gray, board_coords)
+    whites_turn = one_detected and not wt
+    print(whites_turn)
 
     x_batch = np.zeros((64,) + image_shape)
 
@@ -63,6 +70,5 @@ if board_coords is not None:
     fen += ' w - - 0 1'
     print(position)
     print(fen)
-
 
 print(board_coords)
